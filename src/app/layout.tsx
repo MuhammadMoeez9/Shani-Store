@@ -10,7 +10,7 @@ import CartSidebar from "@/Component/Cart-Sidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "HAMMAD GARMENTS - Premium Fashion Store | Redefine Your Style",
+  title: "Shani Store - Premium Fashion Store | Redefine Your Style",
   description:
     "Discover exclusive fashion pieces that blend contemporary design with timeless elegance. Shop premium clothing, accessories, and sustainable fashion at LUXE.",
   keywords: [
