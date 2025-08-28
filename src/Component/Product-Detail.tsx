@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/Context/Cart-Context";
 import type { Product } from "@/Lib/Types";
+import Image from "next/image";
 
 interface ProductDetailProps {
   product: Product;
@@ -21,14 +22,15 @@ interface ProductDetailProps {
 export default function ProductDetail({ product }: ProductDetailProps) {
   const { dispatch } = useCart();
   const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("Black");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedColor, setSelectedColor] = useState("Black"); // kept for future use
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
 
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
-  // const colors = ["Black", "White", "Navy", "Gray"];
-  const images = product.image || [product.image];
+  // ✅ Safe normalization
+  const images = Array.isArray(product.image) ? product.image : [product.image];
 
   const features = [
     { icon: Truck, text: "Free shipping on orders over 5000" },
@@ -93,12 +95,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             key={activeImage}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="aspect-square rounded-2xl overflow-hidden bg-gray-100"
+            className="aspect-square rounded-2xl overflow-hidden bg-gray-100 relative"
           >
-            <img
-              src={(images && images[activeImage]) ?? "/placeholder.svg"}
+            <Image
+              src={images[activeImage] ?? "/placeholder.svg"}
               alt={product?.title ?? "Product Image"}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
             />
           </motion.div>
 
@@ -108,26 +113,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <button
                 key={index}
                 onClick={() => setActiveImage(index)}
-                className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                className={`aspect-square rounded-lg overflow-hidden border-2 transition-all relative ${
                   activeImage === index
                     ? "border-black"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
               >
-                <img
+                <Image
                   src={image || "/placeholder.svg"}
                   alt={`Product view ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="25vw"
                 />
               </button>
-            )) ??
-              // Fallback if `images` is missing
-              Array.from({ length: 4 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200 bg-gray-100"
-                />
-              ))}
+            ))}
           </div>
         </div>
 
@@ -168,33 +168,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </p>
           </div>
 
-          {/* Color Selection */}
-          {/* <div>
-            <h3 className="text-lg font-semibold mb-3">
-              Color: {selectedColor}
-            </h3>
-            <div className="flex space-x-3">
-              {colors.map((color) => (
-                <button
-                  key={color}
-                  onClick={() => setSelectedColor(color)}
-                  className={`w-12 h-12 rounded-full border-2 transition-all ${
-                    selectedColor === color
-                      ? "border-black scale-110"
-                      : "border-gray-300 hover:border-gray-400"
-                  }`}
-                  style={{
-                    backgroundColor:
-                      color.toLowerCase() === "navy"
-                        ? "#1e3a8a"
-                        : color.toLowerCase(),
-                  }}
-                  aria-label={`Select ${color} color`}
-                />
-              ))}
-            </div>
-          </div> */}
-
           {/* Size Selection with Stock */}
           <div>
             <h3 className="text-lg font-semibold mb-3">Size</h3>
@@ -219,13 +192,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     >
                       {size}
                     </button>
-                    {/* {isSelected && (
-                      <div
-                        className={`text-xs mt-1 ${stockInfo.color} font-medium text-center`}
-                      >
-                        {stockInfo.text}
-                      </div>
-                    )} */}
                   </div>
                 );
               })}
