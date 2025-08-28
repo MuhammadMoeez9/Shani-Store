@@ -4,17 +4,12 @@ import Footer from "@/Component/Footer";
 import ProductDetail from "@/Component/Product-Detail";
 import { products } from "@/Lib/Products";
 
-interface ProductPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function ProductPage({ params }: ProductPageProps) {
+// ✅ No custom interface needed, just inline typing
+export default function ProductPage({ params }: { params: { id: string } }) {
   const product = products.find((p) => p.id === Number.parseInt(params.id));
 
   if (!product) {
-    return notFound(); // ✅ explicitly return
+    return notFound(); // must return here
   }
 
   return (
@@ -28,7 +23,8 @@ export default function ProductPage({ params }: ProductPageProps) {
   );
 }
 
-export async function generateStaticParams() {
+// ✅ generateStaticParams typing
+export async function generateStaticParams(): Promise<{ id: string }[]> {
   return products.map((product) => ({
     id: product.id.toString(),
   }));
