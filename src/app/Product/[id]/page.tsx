@@ -8,7 +8,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const product = products.find((p) => p.id === Number(params.id));
 
   if (!product) {
-    notFound();
+    return notFound();
   }
 
   return (
