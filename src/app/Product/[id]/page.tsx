@@ -14,7 +14,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const product = products.find((p) => p.id === Number.parseInt(params.id));
 
   if (!product) {
-    notFound();
+    return notFound(); // ✅ explicitly return
   }
 
   return (
