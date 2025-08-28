@@ -4,13 +4,8 @@ import Footer from "@/Component/Footer";
 import ProductDetail from "@/Component/Product-Detail";
 import { products } from "@/Lib/Products";
 
-export default async function ProductPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const product = products.find((p) => p.id === Number(id));
+export default function ProductPage({ params }: { params: { id: string } }) {
+  const product = products.find((p) => p.id === Number(params.id));
 
   if (!product) {
     notFound();
