@@ -4,7 +4,13 @@ import Footer from "@/Component/Footer";
 import ProductDetail from "@/Component/Product-Detail";
 import { products } from "@/Lib/Products";
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+interface ProductPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function ProductPage({ params }: ProductPageProps) {
   const product = products.find((p) => p.id === Number(params.id));
 
   if (!product) {
